@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   FileText, 
   Download, 
@@ -18,22 +18,30 @@ import {
 import { motion, AnimatePresence } from 'motion/react';
 import { ProjectFile } from '../types';
 import TechBackground from '../components/TechBackground';
+import { localDocs } from '../services/docService';
 
 export default function Docs() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedFile, setSelectedFile] = useState<ProjectFile | null>(null);
   const [activeCategory, setActiveCategory] = useState('all');
-  
-  const files: ProjectFile[] = [
-    { id: '1', projectId: '1', name: 'Planos_Arquitectonicos_V2.pdf', date: '2024-03-15', size: '12.4 MB', category: 'blueprints' },
-    { id: '2', projectId: '1', name: 'Permiso_Construccion_Municipal.pdf', date: '2024-02-28', size: '2.1 MB', category: 'legal' },
-    { id: '3', projectId: '1', name: 'Calculo_Estructural_Final.pdf', date: '2024-03-10', size: '8.7 MB', category: 'blueprints' },
-    { id: '4', projectId: '1', name: 'Contrato_Obra_Civil.pdf', date: '2024-01-15', size: '1.5 MB', category: 'legal' },
-    { id: '5', projectId: '1', name: 'Seguro_Riesgos_Laborales.pdf', date: '2024-03-01', size: '0.8 MB', category: 'safety' },
-    { id: '6', projectId: '1', name: 'Render_Fachada_Principal.jpg', date: '2024-03-18', size: '4.2 MB', category: 'blueprints' },
-    { id: '7', projectId: '1', name: 'Protocolo_Seguridad_Obra.pdf', date: '2024-02-10', size: '0.9 MB', category: 'safety' },
-    { id: '8', projectId: '1', name: 'Escritura_Terreno_Notaria.pdf', date: '2024-01-20', size: '5.5 MB', category: 'legal' },
-  ];
+  const [files, setFiles] = useState<ProjectFile[]>([]);
+
+  useEffect(() => {
+    setFiles(localDocs.getFiles());
+  }, []);
+
+  const handleUpload = () => {
+    // Mock upload
+    const newFile: Omit<ProjectFile, 'id'> = {
+      projectId: '1',
+      name: `Nuevo_Documento_${new Date().getTime()}.pdf`,
+      date: new Date().toISOString().split('T')[0],
+      size: '1.2 MB',
+      category: 'legal'
+    };
+    const updated = localDocs.addFile(newFile);
+    setFiles(updated);
+  };
 
   const categories = [
     { id: 'all', label: 'Todos los Archivos' },
@@ -71,6 +79,7 @@ export default function Docs() {
             animate={{ opacity: 1, x: 0 }}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
+            onClick={handleUpload}
             className="flex items-center gap-3 px-6 py-4 bg-fabrick-yellow text-fabrick-black font-black uppercase tracking-widest rounded-xl shadow-yellow-glow hover:brightness-110 transition-all"
           >
             <Upload size={18} />

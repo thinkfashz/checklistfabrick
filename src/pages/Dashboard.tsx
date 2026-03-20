@@ -20,6 +20,8 @@ import { db, auth } from '../firebase';
 import { collection, query, where, onSnapshot, orderBy, limit } from 'firebase/firestore';
 import { Project, Phase, Deadline, Post } from '../types';
 import TechBackground from '../components/TechBackground';
+import { localChecklist, PhaseTasks } from '../services/checklistService';
+import { localProject } from '../services/projectService';
 
 export default function Dashboard() {
   const [project, setProject] = useState<Project | null>(null);
@@ -34,27 +36,18 @@ export default function Dashboard() {
   const totalEstimatedCost = area * pricePerM2;
 
   const [selectedPhaseId, setSelectedPhaseId] = useState<string | null>(null);
-  const [phaseTasks, setPhaseTasks] = useState<Record<string, { id: string; label: string; completed: boolean }[]>>({
-    '1': [
-      { id: '1-1', label: 'Limpieza de terreno', completed: true },
-      { id: '1-2', label: 'Nivelación', completed: true },
-      { id: '1-3', label: 'Excavaciones', completed: false },
-    ],
-    '2': [
-      { id: '2-1', label: 'Instalación de faenas', completed: false },
-      { id: '2-2', label: 'Trazado', completed: false },
-    ],
-    '3': [
-      { id: '3-1', label: 'Enfierradura', completed: false },
-      { id: '3-2', label: 'Hormigonado', completed: false },
-    ],
-  });
+  const [phaseTasks, setPhaseTasks] = useState<PhaseTasks>({});
 
   const toggleTask = (phaseId: string, taskId: string) => {
-    setPhaseTasks(prev => ({
-      ...prev,
-      [phaseId]: prev[phaseId].map(t => t.id === taskId ? { ...t, completed: !t.completed } : t)
-    }));
+    const updated = localChecklist.toggleTask(phaseId, taskId);
+    setPhaseTasks(updated);
+    
+    // Update project progress based on all tasks
+    const allTasks = Object.values(updated).flat();
+    const completed = allTasks.filter(t => t.completed).length;
+    const progress = Math.round((completed / allTasks.length) * 100);
+    const updatedProject = localProject.updateProgress(progress);
+    setProject(updatedProject);
   };
 
   const calculateProgress = (phaseId: string) => {
@@ -65,17 +58,7 @@ export default function Dashboard() {
   };
 
   useEffect(() => {
-    // Mock data in Spanish
-    const mockProject: Project = {
-      id: '1',
-      name: 'RESIDENCIA VALLE AZUL',
-      progress: 64,
-      activePhase: 'Obra Gris',
-      lastUpdated: 'hace 2 horas',
-      deliveryCountdown: 142,
-      constructionPhaseProgress: 75
-    };
-    setProject(mockProject);
+    setProject(localProject.getProject());
 
     const mockPhases: Phase[] = [
       { id: '1', projectId: '1', name: 'Cimentación', status: 'completed', progress: 100, order: 1 },
@@ -150,6 +133,7 @@ export default function Dashboard() {
       }
     ];
     setRecentPosts(mockPosts);
+    setPhaseTasks(localChecklist.getTasks());
     setLoading(false);
   }, []);
 

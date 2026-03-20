@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Calendar as CalendarIcon, 
   ChevronLeft, 
@@ -15,19 +15,32 @@ import {
 import { motion, AnimatePresence } from 'motion/react';
 import { Deadline } from '../types';
 import TechBackground from '../components/TechBackground';
+import { localTimeline, TimelineNote, TimelineAlarm } from '../services/timelineService';
 
 export default function Timeline() {
   const [currentMonth, setCurrentMonth] = useState('Marzo 2024');
   const [selectedDate, setSelectedDate] = useState<number | null>(20);
   const [showNoteModal, setShowNoteModal] = useState(false);
-  const [notes, setNotes] = useState<Record<number, string>>({
-    20: 'Revisión de materiales en bodega',
-    25: 'Vaciado de losa sector A - Confirmar camiones'
-  });
-  const [alarms, setAlarms] = useState<Record<number, boolean>>({
-    25: true
-  });
+  const [notes, setNotes] = useState<TimelineNote>({});
+  const [alarms, setAlarms] = useState<TimelineAlarm>({});
   const [selectedDeadline, setSelectedDeadline] = useState<Deadline | null>(null);
+
+  useEffect(() => {
+    setNotes(localTimeline.getNotes());
+    setAlarms(localTimeline.getAlarms());
+  }, []);
+
+  const saveNote = (day: number, text: string) => {
+    const updated = { ...notes, [day]: text };
+    setNotes(updated);
+    localTimeline.saveNotes(updated);
+  };
+
+  const toggleAlarm = (day: number) => {
+    const updated = { ...alarms, [day]: !alarms[day] };
+    setAlarms(updated);
+    localTimeline.saveAlarms(updated);
+  };
   
   const deadlines: Deadline[] = [
     { id: '1', projectId: '1', title: 'Vaciado de Losa', date: '2024-03-25', sector: 'Sector A', priority: 'critical' },
@@ -151,7 +164,7 @@ export default function Timeline() {
                     </h3>
                     <div className="flex gap-2">
                       <button 
-                        onClick={() => setAlarms(prev => ({ ...prev, [selectedDate]: !prev[selectedDate] }))}
+                        onClick={() => toggleAlarm(selectedDate)}
                         className={`p-2 rounded-xl transition-all active-scale ${alarms[selectedDate] ? 'bg-fabrick-yellow text-fabrick-black' : 'bg-white/5 text-fabrick-gray hover:text-white'}`}
                       >
                         <Bell size={18} />
@@ -264,7 +277,7 @@ export default function Timeline() {
                 className="w-full bg-white/5 border border-white/10 rounded-xl p-4 text-sm focus:outline-none focus:border-fabrick-yellow transition-all h-32 mb-6 text-white"
                 placeholder="Escribe tu nota aquí..."
                 value={notes[selectedDate || 0] || ''}
-                onChange={(e) => setNotes(prev => ({ ...prev, [selectedDate || 0]: e.target.value }))}
+                onChange={(e) => saveNote(selectedDate || 0, e.target.value)}
               />
               <button 
                 onClick={() => setShowNoteModal(false)}

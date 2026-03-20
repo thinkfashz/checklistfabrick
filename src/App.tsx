@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { onAuthStateChanged, User as FirebaseUser } from 'firebase/auth';
 import { auth } from './firebase';
+import { localAuth, User as LocalUser } from './services/authService';
 import Layout from './components/Layout';
 import Landing from './pages/Landing';
 import Dashboard from './pages/Dashboard';
@@ -11,17 +12,32 @@ import Settings from './pages/Settings';
 import SupportChat from './components/SupportChat';
 
 export default function App() {
-  const [user, setUser] = useState<FirebaseUser | null>(null);
+  const [user, setUser] = useState<FirebaseUser | LocalUser | null>(null);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState('home');
 
   useEffect(() => {
+    // Check local auth first
+    const localUser = localAuth.getCurrentUser();
+    if (localUser) {
+      setUser(localUser);
+      setLoading(false);
+      return;
+    }
+
     const unsubscribe = onAuthStateChanged(auth, (u) => {
       setUser(u);
       setLoading(false);
     });
     return () => unsubscribe();
   }, []);
+
+  const handleLogout = () => {
+    localAuth.logout();
+    auth.signOut();
+    setUser(null);
+    setCurrentPage('home');
+  };
 
   if (loading) {
     return (
@@ -32,7 +48,7 @@ export default function App() {
   }
 
   if (!user) {
-    return <Landing />;
+    return <Landing onLoginSuccess={(u) => setUser(u)} />;
   }
 
   const renderPage = () => {
@@ -46,14 +62,14 @@ export default function App() {
       case 'team':
         return <Team />;
       case 'settings':
-        return <Settings />;
+        return <Settings onLogout={handleLogout} />;
       default:
         return <Dashboard />;
     }
   };
 
   return (
-    <Layout currentPage={currentPage} onPageChange={setCurrentPage}>
+    <Layout currentPage={currentPage} onPageChange={setCurrentPage} onLogout={handleLogout}>
       {renderPage()}
       <SupportChat />
     </Layout>

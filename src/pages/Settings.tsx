@@ -10,20 +10,29 @@ import {
   Camera,
   Save,
   CheckCircle2,
-  AlertCircle
+  AlertCircle,
+  LogOut
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { auth } from '../firebase';
 import TechBackground from '../components/TechBackground';
 
-export default function Settings() {
+import { localAuth } from '../services/authService';
+
+interface SettingsProps {
+  onLogout?: () => void;
+}
+
+export default function Settings({ onLogout }: SettingsProps) {
   const [activeTab, setActiveTab] = useState('profile');
   const [isSaving, setIsSaving] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   
+  const currentUser = (localAuth.getCurrentUser() || auth.currentUser) as any;
+  
   const [profile, setProfile] = useState({
-    name: auth.currentUser?.displayName || 'Faubricio',
-    email: auth.currentUser?.email || 'faubricioedms@gmail.com',
+    name: currentUser?.displayName || 'Faubricio',
+    email: currentUser?.email || 'faubricioedms@gmail.com',
     phone: '+56 9 1234 5678',
     role: 'Propietario',
     bio: 'Construyendo el hogar de mis sueños con CASAS FABRIS.'
@@ -67,22 +76,38 @@ export default function Settings() {
             <p className="text-fabrick-gray font-bold uppercase tracking-widest text-xs">Gestiona tu cuenta y preferencias</p>
           </motion.div>
           
-          <motion.button 
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={handleSave}
-            disabled={isSaving}
-            className="px-8 py-4 bg-fabrick-yellow text-fabrick-black font-black uppercase tracking-widest rounded-xl shadow-yellow-glow hover:brightness-110 transition-all flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {isSaving ? (
-              <div className="w-5 h-5 border-2 border-fabrick-black/30 border-t-fabrick-black rounded-full animate-spin" />
-            ) : (
-              <Save size={20} />
+          <div className="flex items-center gap-4">
+            {onLogout && (
+              <motion.button 
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={onLogout}
+                className="px-6 py-4 bg-red-500/10 text-red-500 font-black uppercase tracking-widest rounded-xl border border-red-500/20 hover:bg-red-500/20 transition-all flex items-center gap-2"
+              >
+                <LogOut size={20} />
+                Cerrar Sesión
+              </motion.button>
             )}
-            {isSaving ? 'Guardando...' : 'Guardar Cambios'}
-          </motion.button>
+            
+            <motion.button 
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={handleSave}
+              disabled={isSaving}
+              className="px-8 py-4 bg-fabrick-yellow text-fabrick-black font-black uppercase tracking-widest rounded-xl shadow-yellow-glow hover:brightness-110 transition-all flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isSaving ? (
+                <div className="w-5 h-5 border-2 border-fabrick-black/30 border-t-fabrick-black rounded-full animate-spin" />
+              ) : (
+                <Save size={20} />
+              )}
+              {isSaving ? 'Guardando...' : 'Guardar Cambios'}
+            </motion.button>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 mt-12">

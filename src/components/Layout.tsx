@@ -23,18 +23,40 @@ interface LayoutProps {
   children: React.ReactNode;
   currentPage: string;
   onPageChange: (page: string) => void;
+  onLogout?: () => void;
 }
 
-export default function Layout({ children, currentPage, onPageChange }: LayoutProps) {
-  const [user, setUser] = useState<FirebaseUser | null>(null);
+import { localAuth } from '../services/authService';
+
+export default function Layout({ children, currentPage, onPageChange, onLogout }: LayoutProps) {
+  const [user, setUser] = useState<any>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
+    // Check local auth first
+    const localUser = localAuth.getCurrentUser();
+    if (localUser) {
+      setUser(localUser);
+    }
+
     const unsubscribe = onAuthStateChanged(auth, (u) => {
-      setUser(u);
+      if (u) {
+        setUser(u);
+      } else if (!localAuth.getCurrentUser()) {
+        setUser(null);
+      }
     });
     return () => unsubscribe();
   }, []);
+
+  const handleLogout = () => {
+    if (onLogout) {
+      onLogout();
+    } else {
+      logout();
+    }
+    setIsMenuOpen(false);
+  };
 
   const navItems = [
     { id: 'home', label: 'Inicio', icon: Home },
@@ -94,7 +116,7 @@ export default function Layout({ children, currentPage, onPageChange }: LayoutPr
                   <p className="text-sm font-bold truncate">{user.displayName}</p>
                   <p className="text-[10px] text-fabrick-gray truncate">{user.email}</p>
                 </div>
-                <button onClick={logout} className="w-full flex items-center gap-3 px-3 py-2.5 text-xs text-red-400 hover:bg-white/5 transition-colors rounded-xl">
+                <button onClick={handleLogout} className="w-full flex items-center gap-3 px-3 py-2.5 text-xs text-red-400 hover:bg-white/5 transition-colors rounded-xl">
                   <LogOut size={16} /> Cerrar Sesión
                 </button>
               </div>
@@ -193,7 +215,7 @@ export default function Layout({ children, currentPage, onPageChange }: LayoutPr
             
             <div className="mt-auto pt-8 border-t border-white/10">
                {user && (
-                 <button onClick={logout} className="w-full flex items-center justify-center gap-3 p-5 bg-red-500/10 text-red-500 rounded-3xl font-bold active-scale">
+                 <button onClick={handleLogout} className="w-full flex items-center justify-center gap-3 p-5 bg-red-500/10 text-red-500 rounded-3xl font-bold active-scale">
                    <LogOut size={20} /> Cerrar Sesión
                  </button>
                )}

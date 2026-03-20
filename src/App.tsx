@@ -10,6 +10,8 @@ import Docs from './pages/Docs';
 import Team from './pages/Team';
 import Settings from './pages/Settings';
 import SupportChat from './components/SupportChat';
+import ErrorAdapter from './components/ErrorAdapter';
+import AppAnalyzer from './components/AppAnalyzer';
 
 export default function App() {
   const [user, setUser] = useState<FirebaseUser | LocalUser | null>(null);
@@ -51,6 +53,23 @@ export default function App() {
     };
   }, []);
 
+  const renderPage = () => {
+    switch (currentPage) {
+      case 'home':
+        return <Dashboard />;
+      case 'timeline':
+        return <Timeline />;
+      case 'docs':
+        return <Docs />;
+      case 'team':
+        return <Team />;
+      case 'settings':
+        return <Settings onLogout={handleLogout} />;
+      default:
+        return <Dashboard />;
+    }
+  };
+
   const handleLogout = () => {
     localAuth.logout();
     auth.signOut();
@@ -91,31 +110,17 @@ export default function App() {
     );
   }
 
-  if (!user) {
-    return <Landing onLoginSuccess={(u) => setUser(u)} />;
-  }
-
-  const renderPage = () => {
-    switch (currentPage) {
-      case 'home':
-        return <Dashboard />;
-      case 'timeline':
-        return <Timeline />;
-      case 'docs':
-        return <Docs />;
-      case 'team':
-        return <Team />;
-      case 'settings':
-        return <Settings onLogout={handleLogout} />;
-      default:
-        return <Dashboard />;
-    }
-  };
-
   return (
-    <Layout currentPage={currentPage} onPageChange={setCurrentPage} onLogout={handleLogout}>
-      {renderPage()}
-      <SupportChat />
-    </Layout>
+    <ErrorAdapter>
+      {!user ? (
+        <Landing onLoginSuccess={(u) => setUser(u)} />
+      ) : (
+        <Layout currentPage={currentPage} onPageChange={setCurrentPage} onLogout={handleLogout}>
+          {renderPage()}
+          <SupportChat />
+          <AppAnalyzer />
+        </Layout>
+      )}
+    </ErrorAdapter>
   );
 }

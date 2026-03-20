@@ -1,20 +1,33 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# Casas Fabris - Gestión de Proyectos
 
-# Run and deploy your AI Studio app
+Aplicación full-stack unificada para la gestión de obras y proyectos de construcción.
 
-This contains everything you need to run your app locally.
+## Estructura del Proyecto
 
-View your app in AI Studio: https://ai.studio/apps/f3a1d89f-7951-4658-82e3-6ac7225a21fc
+- `/src`: Frontend en React + Vite + Tailwind CSS.
+- `/api`: Backend en Express (optimizado para Vercel).
+- `server.ts`: Servidor de desarrollo unificado (Vite + Express).
 
-## Run Locally
+## Despliegue en Vercel
 
-**Prerequisites:**  Node.js
+Esta aplicación está configurada para funcionar "out-of-the-box" en Vercel:
 
+1. Conecta tu repositorio de GitHub a Vercel.
+2. Vercel detectará automáticamente la configuración de `vercel.json`.
+3. El frontend se compilará a `dist/` y el backend se ejecutará como Serverless Functions en `/api`.
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+## Desarrollo Local
+
+```bash
+npm install
+npm run dev
+```
+
+El servidor correrá en el puerto 3000.
+
+## Tecnologías
+
+- **Frontend**: React 19, Framer Motion, Lucide React, Tailwind CSS.
+- **Backend**: Node.js, Express.
+- **Base de Datos**: Firebase Firestore & Auth.
+- **IA**: Google Gemini API.

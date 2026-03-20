@@ -1,0 +1,116 @@
+{
+  "entities": {
+    "Project": {
+      "title": "Project",
+      "description": "Construction project details",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "progress": { "type": "number" },
+        "activePhase": { "type": "string" },
+        "lastUpdated": { "type": "string" },
+        "deliveryCountdown": { "type": "number" },
+        "constructionPhaseProgress": { "type": "number" }
+      },
+      "required": ["id", "name", "progress"]
+    },
+    "Phase": {
+      "title": "Phase",
+      "description": "Construction stage/phase",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "projectId": { "type": "string" },
+        "name": { "type": "string" },
+        "status": { "type": "string", "enum": ["completed", "in-progress", "pending", "not-started"] },
+        "progress": { "type": "number" },
+        "order": { "type": "number" }
+      },
+      "required": ["id", "projectId", "name", "status"]
+    },
+    "Deadline": {
+      "title": "Deadline",
+      "description": "Upcoming project deadline",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "projectId": { "type": "string" },
+        "title": { "type": "string" },
+        "date": { "type": "string" },
+        "sector": { "type": "string" },
+        "priority": { "type": "string", "enum": ["critical", "active", "routine"] }
+      },
+      "required": ["id", "projectId", "title", "date"]
+    },
+    "File": {
+      "title": "File",
+      "description": "Project document/file",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "projectId": { "type": "string" },
+        "name": { "type": "string" },
+        "date": { "type": "string" },
+        "size": { "type": "string" },
+        "category": { "type": "string", "enum": ["blueprints", "legal", "safety"] }
+      },
+      "required": ["id", "projectId", "name", "category"]
+    },
+    "Post": {
+      "title": "Post",
+      "description": "Project wall update or chat message",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "projectId": { "type": "string" },
+        "authorId": { "type": "string" },
+        "authorName": { "type": "string" },
+        "authorRole": { "type": "string" },
+        "content": { "type": "string" },
+        "timestamp": { "type": "string" },
+        "priority": { "type": "string" }
+      },
+      "required": ["id", "projectId", "authorId", "content", "timestamp"]
+    },
+    "User": {
+      "title": "User",
+      "description": "App user profile",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "email": { "type": "string" },
+        "role": { "type": "string" },
+        "photoUrl": { "type": "string" }
+      },
+      "required": ["id", "email"]
+    }
+  },
+  "firestore": {
+    "/projects": {
+      "schema": "Project",
+      "description": "Collection of construction projects"
+    },
+    "/projects/{projectId}/phases": {
+      "schema": "Phase",
+      "description": "Construction stages for a project"
+    },
+    "/projects/{projectId}/deadlines": {
+      "schema": "Deadline",
+      "description": "Deadlines for a project"
+    },
+    "/projects/{projectId}/files": {
+      "schema": "File",
+      "description": "Documents for a project"
+    },
+    "/projects/{projectId}/posts": {
+      "schema": "Post",
+      "description": "Wall updates and chat for a project"
+    },
+    "/users": {
+      "schema": "User",
+      "description": "User profiles"
+    }
+  }
+}

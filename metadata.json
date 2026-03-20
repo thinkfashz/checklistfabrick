@@ -1,0 +1,5 @@
+{
+  "name": "Casas Fabrick",
+  "description": "Construction progress dashboard and architectural studio portal.",
+  "requestFramePermissions": ["geolocation"]
+}

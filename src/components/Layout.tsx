@@ -15,7 +15,7 @@ import {
   LogOut,
   User
 } from 'lucide-react';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { auth, signInWithGoogle, logout } from '../firebase';
 import { onAuthStateChanged, User as FirebaseUser } from 'firebase/auth';
 
@@ -109,11 +109,11 @@ export default function Layout({ children, currentPage, onPageChange, onLogout }
           {user ? (
             <div className="relative group">
               <button className="w-10 h-10 rounded-full bg-fabrick-card overflow-hidden border border-white/10 active-scale">
-                <img src={user.photoURL || `https://ui-avatars.com/api/?name=${user.displayName}`} alt="Profile" className="w-full h-full object-cover" />
+                <img src={user.photoURL || `https://ui-avatars.com/api/?name=${user.displayName || user.name}`} alt="Profile" className="w-full h-full object-cover" />
               </button>
               <div className="absolute right-0 mt-3 w-56 glass-panel rounded-2xl shadow-ios opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all p-3 z-[60]">
                 <div className="px-3 py-2 border-b border-white/5 mb-2">
-                  <p className="text-sm font-bold truncate">{user.displayName}</p>
+                  <p className="text-sm font-bold truncate">{user.displayName || user.name}</p>
                   <p className="text-[10px] text-fabrick-gray truncate">{user.email}</p>
                 </div>
                 <button onClick={handleLogout} className="w-full flex items-center gap-3 px-3 py-2.5 text-xs text-red-400 hover:bg-white/5 transition-colors rounded-xl">

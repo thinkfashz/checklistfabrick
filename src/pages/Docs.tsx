@@ -15,7 +15,7 @@ import {
   ExternalLink,
   Upload
 } from 'lucide-react';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { ProjectFile } from '../types';
 import TechBackground from '../components/TechBackground';
 import { localDocs } from '../services/docService';

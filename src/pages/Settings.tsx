@@ -13,7 +13,7 @@ import {
   AlertCircle,
   LogOut
 } from 'lucide-react';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { auth } from '../firebase';
 import TechBackground from '../components/TechBackground';
 
@@ -31,7 +31,7 @@ export default function Settings({ onLogout }: SettingsProps) {
   const currentUser = (localAuth.getCurrentUser() || auth.currentUser) as any;
   
   const [profile, setProfile] = useState({
-    name: currentUser?.displayName || 'Faubricio',
+    name: currentUser?.displayName || currentUser?.name || 'Faubricio',
     email: currentUser?.email || 'faubricioedms@gmail.com',
     phone: '+56 9 1234 5678',
     role: 'Propietario',

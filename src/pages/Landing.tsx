@@ -1,5 +1,5 @@
 import React, { useState, Suspense } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronRight, Play, ArrowUpRight, Box, Shield, Zap, MousePointer2, CheckCircle2, X, Lock, Mail } from 'lucide-react';
 import { signInWithGoogle } from '../firebase';
 import { localAuth, User } from '../services/authService';

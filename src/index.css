@@ -33,6 +33,14 @@
   @apply backdrop-blur-xl bg-white/5 border border-white/10;
 }
 
+.safe-top {
+  padding-top: env(safe-area-inset-top, 0px);
+}
+
+.safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
 .android-card {
   @apply bg-fabrick-card rounded-3xl shadow-android border border-white/5;
 }

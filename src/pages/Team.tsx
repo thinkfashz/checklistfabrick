@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'motion/react';
+import { motion } from 'framer-motion';
 import { Users, CheckCircle2, AlertCircle, Clock, HardHat, Construction, ShieldCheck } from 'lucide-react';
 import TechBackground from '../components/TechBackground';
 

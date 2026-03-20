@@ -12,7 +12,7 @@ import {
   StickyNote,
   X
 } from 'lucide-react';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Deadline } from '../types';
 import TechBackground from '../components/TechBackground';
 import { localTimeline, TimelineNote, TimelineAlarm } from '../services/timelineService';

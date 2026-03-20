@@ -15,10 +15,11 @@ import {
   ChevronDown,
   ChevronUp
 } from 'lucide-react';
-import { motion } from 'motion/react';
+import { motion, AnimatePresence } from 'motion/react';
 import { db, auth } from '../firebase';
 import { collection, query, where, onSnapshot, orderBy, limit } from 'firebase/firestore';
 import { Project, Phase, Deadline, Post } from '../types';
+import TechBackground from '../components/TechBackground';
 
 export default function Dashboard() {
   const [project, setProject] = useState<Project | null>(null);
@@ -161,254 +162,326 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="container mx-auto px-6 py-8">
-      {/* Hero Section */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
-        <div className="lg:col-span-2">
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="glass-panel p-8 relative overflow-hidden border-t-4 border-fabrick-yellow shadow-yellow-glow"
-          >
-            <div className="absolute top-0 right-0 w-64 h-64 bg-fabrick-yellow/5 blur-[100px] rounded-full -mr-32 -mt-32 animate-pulse" />
-            
-            <div className="flex justify-between items-start mb-8 relative z-10">
-              <div>
-                <span className="text-[10px] font-headline uppercase tracking-[0.4em] text-fabrick-yellow font-black mb-2 block">
-                  Estado del Proyecto
-                </span>
-                <h2 className="text-5xl font-headline font-black tracking-tighter uppercase text-white leading-none">
-                  RESIDENCIA <span className="text-fabrick-yellow">VALLE AZUL</span>
-                </h2>
-              </div>
-              <div className="flex items-center gap-2 px-4 py-2 bg-fabrick-yellow/10 rounded-full border border-fabrick-yellow/20">
-                <div className="w-2 h-2 bg-fabrick-yellow rounded-full animate-ping" />
-                <span className="text-[10px] font-black uppercase tracking-widest text-fabrick-yellow">En Construcción</span>
-              </div>
-            </div>
+    <div className="container mx-auto px-6 py-8 relative">
+      {/* Background Tech for Dashboard */}
+      <TechBackground 
+        className="opacity-40 fixed"
+      />
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div className="space-y-2">
-                <p className="text-[10px] font-headline uppercase tracking-widest text-fabrick-gray">Progreso General</p>
-                <div className="flex items-end gap-2">
-                  <span className="text-5xl font-headline font-bold text-white">{project?.progress}%</span>
-                  <TrendingUp size={20} className="text-fabrick-yellow mb-2" />
+      <div className="relative z-10">
+        {/* Hero Section */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
+          <div className="lg:col-span-2">
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="android-card p-8 relative overflow-hidden border-t-4 border-fabrick-yellow shadow-ios"
+            >
+              <div className="absolute top-0 right-0 w-64 h-64 bg-fabrick-yellow/5 blur-[100px] rounded-full -mr-32 -mt-32 animate-pulse" />
+              
+              <div className="flex justify-between items-start mb-10 relative z-10">
+                <div>
+                  <motion.span 
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.3 }}
+                    className="text-[10px] font-headline uppercase tracking-[0.4em] text-fabrick-yellow font-black mb-3 block"
+                  >
+                    Estado del Proyecto
+                  </motion.span>
+                  <motion.h2 
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.4 }}
+                    className="text-4xl md:text-5xl font-headline font-black tracking-tighter uppercase text-white leading-none"
+                  >
+                    RESIDENCIA <span className="text-fabrick-yellow">VALLE AZUL</span>
+                  </motion.h2>
                 </div>
-                <div className="h-1.5 bg-white/5 rounded-full overflow-hidden">
-                  <motion.div 
-                    initial={{ width: 0 }}
-                    animate={{ width: `${project?.progress}%` }}
-                    transition={{ duration: 1, ease: "easeOut" }}
-                    className="h-full bg-gradient-to-r from-fabrick-yellow to-fabrick-lava" 
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <p className="text-[10px] font-headline uppercase tracking-widest text-fabrick-gray">Fase Actual</p>
-                <p className="text-2xl font-headline font-bold uppercase italic text-fabrick-yellow">{project?.activePhase}</p>
-                <div className="flex items-center gap-2 text-xs text-fabrick-gray">
-                  <Clock size={14} />
-                  <span>Actualizado {project?.lastUpdated}</span>
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <p className="text-[10px] font-headline uppercase tracking-widest text-fabrick-gray">Días para Entrega</p>
-                <p className="text-5xl font-headline font-bold text-white">{project?.deliveryCountdown}</p>
-                <p className="text-[10px] font-headline uppercase tracking-widest text-fabrick-lava font-bold">Cuenta Regresiva</p>
-              </div>
-            </div>
-          </motion.div>
-        </div>
-
-        {/* Calculator Section */}
-        <div className="space-y-6">
-          <motion.div 
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="glass-panel p-8 border-l-4 border-fabrick-yellow bg-gradient-to-br from-fabrick-card to-fabrick-yellow/5 relative overflow-hidden"
-          >
-            <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-fabrick-yellow/10 blur-3xl rounded-full" />
-            
-            <h3 className="font-headline text-[12px] uppercase tracking-[0.2em] font-black mb-6 flex items-center gap-3 text-white">
-              <Calculator size={18} className="text-fabrick-yellow" /> 
-              <span>Calculadora de Presupuesto</span>
-            </h3>
-            
-            <div className="space-y-6 relative z-10">
-              <div className="space-y-3">
-                <div className="flex justify-between items-center">
-                  <label className="text-[10px] uppercase text-fabrick-gray font-black tracking-widest">Superficie (m²)</label>
-                  <span className="text-fabrick-yellow font-headline font-bold">{area} m²</span>
-                </div>
-                <input 
-                  type="range" 
-                  min="40" 
-                  max="500" 
-                  step="5"
-                  value={area}
-                  onChange={(e) => setArea(Number(e.target.value))}
-                  className="w-full h-1.5 bg-white/10 rounded-lg appearance-none cursor-pointer accent-fabrick-yellow"
-                />
-                <div className="flex justify-between text-[8px] text-fabrick-gray font-bold uppercase">
-                  <span>40 m²</span>
-                  <span>500 m²</span>
-                </div>
-              </div>
-
-              <div className="p-6 bg-fabrick-black/40 rounded-xl border border-white/5 shadow-inner group transition-all hover:border-fabrick-yellow/20">
-                <p className="text-[10px] text-fabrick-gray uppercase mb-2 font-black tracking-widest flex items-center gap-2">
-                  Inversión Estimada Total
-                  <ArrowUpRight size={12} className="text-fabrick-yellow opacity-0 group-hover:opacity-100 transition-opacity" />
-                </p>
-                <div className="flex items-baseline gap-2">
-                  <p className="text-4xl font-headline font-black text-white tracking-tighter">
-                    ${totalEstimatedCost.toLocaleString('es-CL')}
-                  </p>
-                  <span className="text-xs text-fabrick-yellow font-black uppercase">CLP</span>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-3 text-[10px] text-fabrick-gray bg-white/5 p-3 rounded-lg border border-white/5">
-                <div className="w-8 h-8 rounded-full bg-fabrick-yellow/10 flex items-center justify-center shrink-0">
-                  <AlertCircle size={14} className="text-fabrick-yellow" />
-                </div>
-                <p className="leading-tight">
-                  Basado en un valor de <span className="text-white font-bold">$750.000 CLP</span> por metro cuadrado de construcción llave en mano.
-                </p>
-              </div>
-            </div>
-          </motion.div>
-        </div>
-      </div>
-
-      {/* Secondary Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Phases List */}
-        <div className="lg:col-span-2 space-y-6">
-          <div className="flex justify-between items-end">
-            <h3 className="font-headline text-2xl font-bold tracking-tighter uppercase text-white">Fases de Construcción</h3>
-            <button className="text-[10px] font-bold uppercase tracking-widest text-fabrick-yellow flex items-center gap-1">
-              Cronograma Completo <ArrowUpRight size={12} />
-            </button>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="space-y-4">
-              {phases.map((phase) => (
-                <div 
-                  key={phase.id} 
-                  onClick={() => setSelectedPhaseId(phase.id)}
-                  className={`glass-panel p-5 transition-all cursor-pointer group relative ${
-                    selectedPhaseId === phase.id ? 'border-fabrick-yellow ring-1 ring-fabrick-yellow/50' : 'hover:border-white/20'
-                  }`}
+                <motion.div 
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="flex items-center gap-2 px-4 py-2 bg-fabrick-yellow/10 rounded-full border border-fabrick-yellow/20 active-scale cursor-default"
                 >
-                  <div className="flex justify-between items-start mb-4">
-                    <div className="flex items-center gap-3">
-                      <div className={`w-10 h-10 rounded-lg flex items-center justify-center transition-colors ${
-                        phase.status === 'completed' ? 'bg-fabrick-yellow text-fabrick-black' :
-                        phase.status === 'in-progress' ? 'bg-fabrick-yellow/20 text-fabrick-yellow' :
-                        'bg-white/5 text-fabrick-gray'
-                      }`}>
-                        {phase.status === 'completed' ? <CheckCircle2 size={20} /> : 
-                         phase.status === 'in-progress' ? <Activity size={20} className="animate-pulse" /> : 
-                         <Circle size={20} />}
-                      </div>
-                      <div>
-                        <p className="text-sm font-black uppercase tracking-widest text-white">{phase.name}</p>
-                        <p className="text-[10px] text-fabrick-gray uppercase font-bold">
-                          {phase.status === 'completed' ? 'Completado' : phase.status === 'in-progress' ? 'En Ejecución' : 'Pendiente'}
-                        </p>
-                      </div>
-                    </div>
-                    <div className="text-right">
-                      <span className="text-xl font-headline font-black text-white">{phase.progress}%</span>
-                    </div>
+                  <div className="w-2 h-2 bg-fabrick-yellow rounded-full animate-ping" />
+                  <span className="text-[10px] font-black uppercase tracking-widest text-fabrick-yellow">En Construcción</span>
+                </motion.div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+                <motion.div 
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.5 }}
+                  className="space-y-3"
+                >
+                  <p className="text-[10px] font-headline uppercase tracking-widest text-fabrick-gray font-bold">Progreso General</p>
+                  <div className="flex items-end gap-2">
+                    <span className="text-5xl font-headline font-black text-white">{project?.progress}%</span>
+                    <TrendingUp size={24} className="text-fabrick-yellow mb-2" />
                   </div>
-                  <div className="h-1.5 bg-white/5 rounded-full overflow-hidden">
+                  <div className="h-2 bg-white/5 rounded-full overflow-hidden">
                     <motion.div 
                       initial={{ width: 0 }}
-                      animate={{ width: `${phase.progress}%` }}
-                      className={`h-full transition-all duration-1000 ${
-                        phase.status === 'completed' ? 'bg-fabrick-yellow' : 'bg-fabrick-yellow/50'
-                      }`} 
+                      animate={{ width: `${project?.progress}%` }}
+                      transition={{ duration: 1.5, ease: "easeOut", delay: 0.6 }}
+                      className="h-full bg-gradient-to-r from-fabrick-yellow to-fabrick-lava shadow-[0_0_10px_rgba(250,204,21,0.3)]" 
                     />
                   </div>
-                  {selectedPhaseId === phase.id && (
-                    <div className="absolute -right-2 top-1/2 -translate-y-1/2 w-1 h-8 bg-fabrick-yellow rounded-full hidden md:block" />
-                  )}
-                </div>
-              ))}
-            </div>
+                </motion.div>
 
-            {/* Checklist for selected phase */}
-            <div className="glass-panel p-6 border-fabrick-yellow/20">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="p-2 bg-fabrick-yellow/10 rounded-lg">
-                  <ListTodo size={20} className="text-fabrick-yellow" />
-                </div>
-                <h4 className="font-headline font-black text-lg uppercase tracking-tight">
-                  Tareas: {phases.find(p => p.id === selectedPhaseId)?.name}
-                </h4>
-              </div>
+                <motion.div 
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.6 }}
+                  className="space-y-3"
+                >
+                  <p className="text-[10px] font-headline uppercase tracking-widest text-fabrick-gray font-bold">Fase Actual</p>
+                  <p className="text-2xl font-headline font-black uppercase italic text-fabrick-yellow tracking-tight">{project?.activePhase}</p>
+                  <div className="flex items-center gap-2 text-[10px] text-fabrick-gray font-bold uppercase tracking-wider">
+                    <Clock size={14} />
+                    <span>Actualizado {project?.lastUpdated}</span>
+                  </div>
+                </motion.div>
 
-              <div className="space-y-3">
-                {phaseTasks[selectedPhaseId || '']?.map((task) => (
-                  <div 
-                    key={task.id}
-                    onClick={() => toggleTask(selectedPhaseId!, task.id)}
-                    className="flex items-center gap-4 p-4 bg-white/5 rounded-xl border border-white/5 hover:bg-white/10 transition-all cursor-pointer group"
-                  >
-                    <div className={`w-6 h-6 rounded-md border-2 flex items-center justify-center transition-all ${
-                      task.completed ? 'bg-fabrick-yellow border-fabrick-yellow text-fabrick-black' : 'border-white/20 group-hover:border-fabrick-yellow/50'
-                    }`}>
-                      {task.completed && <CheckCircle2 size={14} strokeWidth={3} />}
-                    </div>
-                    <span className={`text-sm font-medium transition-all ${
-                      task.completed ? 'text-fabrick-gray line-through' : 'text-white'
-                    }`}>
-                      {task.label}
-                    </span>
-                  </div>
-                )) || (
-                  <div className="flex flex-col items-center justify-center py-12 text-center opacity-40">
-                    <ListTodo size={40} className="mb-4" />
-                    <p className="text-xs uppercase font-black tracking-widest">Selecciona una fase para ver tareas</p>
-                  </div>
-                )}
+                <motion.div 
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.7 }}
+                  className="space-y-3"
+                >
+                  <p className="text-[10px] font-headline uppercase tracking-widest text-fabrick-gray font-bold">Días para Entrega</p>
+                  <p className="text-5xl font-headline font-black text-white tracking-tighter">{project?.deliveryCountdown}</p>
+                  <p className="text-[10px] font-headline uppercase tracking-[0.2em] text-fabrick-lava font-black">Cuenta Regresiva</p>
+                </motion.div>
               </div>
-            </div>
+            </motion.div>
+          </div>
+
+          {/* Calculator Section */}
+          <div className="space-y-6">
+            <motion.div 
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="android-card p-8 border-l-4 border-fabrick-yellow bg-gradient-to-br from-fabrick-card to-fabrick-yellow/5 relative overflow-hidden shadow-ios"
+            >
+              <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-fabrick-yellow/10 blur-3xl rounded-full" />
+              
+              <h3 className="font-headline text-[12px] uppercase tracking-[0.25em] font-black mb-8 flex items-center gap-3 text-white">
+                <Calculator size={18} className="text-fabrick-yellow" /> 
+                <span>Calculadora de Presupuesto</span>
+              </h3>
+              
+              <div className="space-y-8 relative z-10">
+                <div className="space-y-4">
+                  <div className="flex justify-between items-center">
+                    <label className="text-[10px] uppercase text-fabrick-gray font-black tracking-widest">Superficie (m²)</label>
+                    <span className="text-fabrick-yellow font-headline font-black text-lg">{area} m²</span>
+                  </div>
+                  <input 
+                    type="range" 
+                    min="40" 
+                    max="500" 
+                    step="5"
+                    value={area}
+                    onChange={(e) => setArea(Number(e.target.value))}
+                    className="w-full h-2 bg-white/10 rounded-full appearance-none cursor-pointer accent-fabrick-yellow active-scale"
+                  />
+                  <div className="flex justify-between text-[9px] text-fabrick-gray font-black uppercase tracking-tighter">
+                    <span>40 m²</span>
+                    <span>500 m²</span>
+                  </div>
+                </div>
+
+                <motion.div 
+                  whileHover={{ scale: 1.02 }}
+                  className="p-6 bg-fabrick-black/60 rounded-3xl border border-white/5 shadow-inner group transition-all hover:border-fabrick-yellow/20 active-scale"
+                >
+                  <p className="text-[10px] text-fabrick-gray uppercase mb-2 font-black tracking-widest flex items-center gap-2">
+                    Inversión Estimada Total
+                    <ArrowUpRight size={14} className="text-fabrick-yellow opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </p>
+                  <div className="flex items-baseline gap-2">
+                    <p className="text-4xl font-headline font-black text-white tracking-tighter leading-none">
+                      ${totalEstimatedCost.toLocaleString('es-CL')}
+                    </p>
+                    <span className="text-xs text-fabrick-yellow font-black uppercase">CLP</span>
+                  </div>
+                </motion.div>
+
+                <div className="flex items-center gap-4 text-[10px] text-fabrick-gray bg-white/5 p-4 rounded-2xl border border-white/5">
+                  <div className="w-10 h-10 rounded-full bg-fabrick-yellow/10 flex items-center justify-center shrink-0">
+                    <AlertCircle size={16} className="text-fabrick-yellow" />
+                  </div>
+                  <p className="leading-relaxed font-medium">
+                    Basado en un valor de <span className="text-white font-black">$750.000 CLP</span> por metro cuadrado de construcción llave en mano.
+                  </p>
+                </div>
+              </div>
+            </motion.div>
           </div>
         </div>
 
-        {/* Recent Activity / Wall */}
-        <div className="space-y-6">
-          <h3 className="font-headline text-2xl font-bold tracking-tighter uppercase text-white">Muro del Proyecto</h3>
-          <div className="glass-panel p-6 space-y-6 max-h-[500px] overflow-y-auto hide-scrollbar">
-            {recentPosts.map((post) => (
-              <div key={post.id} className="relative pl-4 border-l border-white/10">
-                <div className="flex items-center gap-3 mb-2">
-                  <img src={post.avatar} alt={post.authorName} className="w-6 h-6 rounded-full" />
-                  <div>
-                    <p className="text-[10px] font-bold text-white">{post.authorName}</p>
-                    <p className="text-[8px] text-fabrick-gray uppercase tracking-widest">{post.authorRole}</p>
-                  </div>
-                </div>
-                <p className="text-xs text-fabrick-gray leading-relaxed mb-2">{post.content}</p>
-                <div className="flex justify-between items-center">
-                  <span className="text-[8px] text-fabrick-gray uppercase">hace poco</span>
-                  {post.priority === 'high' && (
-                    <span className="flex items-center gap-1 text-[8px] text-fabrick-lava font-bold uppercase">
-                      <AlertCircle size={8} /> Importante
-                    </span>
-                  )}
-                </div>
+        {/* Secondary Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Phases List */}
+          <div className="lg:col-span-2 space-y-6">
+            <div className="flex justify-between items-end">
+              <h3 className="font-headline text-2xl font-bold tracking-tighter uppercase text-white">Fases de Construcción</h3>
+              <button className="text-[10px] font-bold uppercase tracking-widest text-fabrick-yellow flex items-center gap-1">
+                Cronograma Completo <ArrowUpRight size={12} />
+              </button>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-4">
+                {phases.map((phase, idx) => (
+                  <motion.div 
+                    key={phase.id} 
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.1 * idx }}
+                    onClick={() => setSelectedPhaseId(phase.id)}
+                    whileHover={{ x: 5 }}
+                    className={`android-card p-5 transition-all cursor-pointer group relative active-scale ${
+                      selectedPhaseId === phase.id ? 'border-fabrick-yellow ring-2 ring-fabrick-yellow/20' : 'hover:border-white/20'
+                    }`}
+                  >
+                    <div className="flex justify-between items-start mb-5">
+                      <div className="flex items-center gap-4">
+                        <div className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all shadow-ios ${
+                          phase.status === 'completed' ? 'bg-fabrick-yellow text-fabrick-black' :
+                          phase.status === 'in-progress' ? 'bg-fabrick-yellow/20 text-fabrick-yellow' :
+                          'bg-white/5 text-fabrick-gray'
+                        }`}>
+                          {phase.status === 'completed' ? <CheckCircle2 size={24} /> : 
+                           phase.status === 'in-progress' ? <Activity size={24} className="animate-pulse" /> : 
+                           <Circle size={24} />}
+                        </div>
+                        <div>
+                          <p className="text-sm font-black uppercase tracking-tight text-white">{phase.name}</p>
+                          <p className="text-[10px] text-fabrick-gray uppercase font-black tracking-widest">
+                            {phase.status === 'completed' ? 'Completado' : phase.status === 'in-progress' ? 'En Ejecución' : 'Pendiente'}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <span className="text-2xl font-headline font-black text-white">{phase.progress}%</span>
+                      </div>
+                    </div>
+                    <div className="h-2 bg-white/5 rounded-full overflow-hidden">
+                      <motion.div 
+                        initial={{ width: 0 }}
+                        animate={{ width: `${phase.progress}%` }}
+                        transition={{ duration: 1, delay: 0.2 + idx * 0.1 }}
+                        className={`h-full transition-all duration-1000 shadow-[0_0_8px_rgba(250,204,21,0.2)] ${
+                          phase.status === 'completed' ? 'bg-fabrick-yellow' : 'bg-fabrick-yellow/50'
+                        }`} 
+                      />
+                    </div>
+                    {selectedPhaseId === phase.id && (
+                      <motion.div 
+                        layoutId="active-indicator"
+                        className="absolute -right-2 top-1/2 -translate-y-1/2 w-1.5 h-10 bg-fabrick-yellow rounded-full hidden md:block" 
+                      />
+                    )}
+                  </motion.div>
+                ))}
               </div>
-            ))}
-            <button className="w-full py-3 bg-white/5 text-[10px] font-bold uppercase tracking-widest text-white hover:bg-white/10 transition-colors rounded-sm">
-              Ver Toda la Actividad
-            </button>
+
+              {/* Checklist for selected phase */}
+              <AnimatePresence mode="wait">
+                  <motion.div 
+                    key={selectedPhaseId || 'empty'}
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.95 }}
+                    className="android-card p-8 border-fabrick-yellow/20 min-h-[450px] shadow-ios"
+                  >
+                    <div className="flex items-center gap-4 mb-8">
+                      <div className="p-3 bg-fabrick-yellow/10 rounded-2xl">
+                        <ListTodo size={24} className="text-fabrick-yellow" />
+                      </div>
+                      <h4 className="font-headline font-black text-xl uppercase tracking-tight">
+                        Tareas: {phases.find(p => p.id === selectedPhaseId)?.name || 'Selecciona Fase'}
+                      </h4>
+                    </div>
+
+                    <div className="space-y-4">
+                      {phaseTasks[selectedPhaseId || '']?.map((task, idx) => (
+                        <motion.div 
+                          key={task.id}
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: idx * 0.05 }}
+                          onClick={() => toggleTask(selectedPhaseId!, task.id)}
+                          whileHover={{ scale: 1.01 }}
+                          whileTap={{ scale: 0.98 }}
+                          className="flex items-center gap-5 p-5 bg-white/5 rounded-2xl border border-white/5 hover:bg-white/10 transition-all cursor-pointer group active-scale"
+                        >
+                          <div className={`w-7 h-7 rounded-xl border-2 flex items-center justify-center transition-all shadow-sm ${
+                            task.completed ? 'bg-fabrick-yellow border-fabrick-yellow text-fabrick-black' : 'border-white/20 group-hover:border-fabrick-yellow/50'
+                          }`}>
+                            {task.completed && <CheckCircle2 size={16} strokeWidth={3} />}
+                          </div>
+                          <span className={`text-base font-bold transition-all tracking-tight ${
+                            task.completed ? 'text-fabrick-gray line-through' : 'text-white'
+                          }`}>
+                            {task.label}
+                          </span>
+                        </motion.div>
+                      )) || (
+                        <div className="flex flex-col items-center justify-center py-16 text-center opacity-30">
+                          <ListTodo size={48} className="mb-6" />
+                          <p className="text-xs uppercase font-black tracking-[0.2em]">Selecciona una fase para ver tareas</p>
+                        </div>
+                      )}
+                    </div>
+                  </motion.div>
+              </AnimatePresence>
+            </div>
+          </div>
+
+          {/* Recent Activity / Wall */}
+          <div className="space-y-6">
+            <h3 className="font-headline text-2xl font-black tracking-tighter uppercase text-white">Muro del Proyecto</h3>
+            <div className="android-card p-8 space-y-8 max-h-[600px] overflow-y-auto hide-scrollbar shadow-ios">
+              {recentPosts.map((post, idx) => (
+                <motion.div 
+                  key={post.id} 
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.5 + idx * 0.1 }}
+                  className="relative pl-6 border-l-2 border-white/5 hover:border-fabrick-yellow/30 transition-colors"
+                >
+                  <div className="flex items-center gap-4 mb-3">
+                    <img src={post.avatar} alt={post.authorName} className="w-8 h-8 rounded-full border border-white/10" />
+                    <div>
+                      <p className="text-xs font-black text-white tracking-tight">{post.authorName}</p>
+                      <p className="text-[9px] text-fabrick-gray uppercase tracking-widest font-black">{post.authorRole}</p>
+                    </div>
+                  </div>
+                  <p className="text-sm text-fabrick-gray leading-relaxed mb-3 font-medium">{post.content}</p>
+                  <div className="flex justify-between items-center">
+                    <span className="text-[9px] text-fabrick-gray uppercase font-black tracking-widest">hace poco</span>
+                    {post.priority === 'high' && (
+                      <span className="flex items-center gap-1.5 text-[9px] text-fabrick-lava font-black uppercase tracking-widest">
+                        <AlertCircle size={10} /> Importante
+                      </span>
+                    )}
+                  </div>
+                </motion.div>
+              ))}
+              <motion.button 
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="w-full py-4 bg-white/5 text-[10px] font-black uppercase tracking-[0.2em] text-white hover:bg-white/10 transition-colors rounded-2xl active-scale"
+              >
+                Ver Toda la Actividad
+              </motion.button>
+            </div>
           </div>
         </div>
       </div>

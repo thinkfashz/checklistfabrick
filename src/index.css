@@ -12,24 +12,33 @@
   --color-fabrick-yellow: #FACC15;
   --color-fabrick-lava: #EAB308;
   --color-fabrick-gray: #71717A;
+
+  --shadow-ios: 0 4px 30px rgba(0, 0, 0, 0.1);
+  --shadow-android: 0 2px 4px rgba(0, 0, 0, 0.2), 0 4px 8px rgba(0, 0, 0, 0.1);
+  --shadow-yellow-glow: 0 0 30px rgba(250, 204, 21, 0.2);
 }
 
 @layer base {
   body {
     @apply bg-fabrick-black text-white font-sans antialiased selection:bg-fabrick-yellow selection:text-fabrick-black;
+    -webkit-tap-highlight-color: transparent;
   }
 }
 
 .glass-panel {
-  @apply bg-fabrick-card/40 backdrop-blur-2xl border border-white/10;
+  @apply bg-fabrick-card/60 backdrop-blur-3xl border border-white/10;
+}
+
+.ios-blur {
+  @apply backdrop-blur-xl bg-white/5 border border-white/10;
+}
+
+.android-card {
+  @apply bg-fabrick-card rounded-3xl shadow-android border border-white/5;
 }
 
 .yellow-gradient {
   background: linear-gradient(135deg, #FACC15 0%, #EAB308 100%);
-}
-
-.yellow-glow {
-  box-shadow: 0 0 30px rgba(250, 204, 21, 0.2);
 }
 
 .hide-scrollbar::-webkit-scrollbar {
@@ -38,4 +47,9 @@
 .hide-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+/* Native-like active states */
+.active-scale {
+  @apply transition-transform active:scale-95;
 }

@@ -22,6 +22,8 @@ import { Project, Phase, Deadline, Post } from '../types';
 import TechBackground from '../components/TechBackground';
 import { localChecklist, PhaseTasks } from '../services/checklistService';
 import { localProject } from '../services/projectService';
+import { reportService } from '../services/reportService';
+import { FileDown } from 'lucide-react';
 
 export default function Dashboard() {
   const [project, setProject] = useState<Project | null>(null);
@@ -137,6 +139,10 @@ export default function Dashboard() {
     setLoading(false);
   }, []);
 
+  const handleGenerateReport = () => {
+    reportService.generateProjectReport(project, phases, recentPosts, area, totalEstimatedCost);
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center h-[60vh]">
@@ -183,14 +189,27 @@ export default function Dashboard() {
                     RESIDENCIA <span className="text-fabrick-yellow">VALLE AZUL</span>
                   </motion.h2>
                 </div>
-                <motion.div 
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  className="flex items-center gap-2 px-4 py-2 bg-fabrick-yellow/10 rounded-full border border-fabrick-yellow/20 active-scale cursor-default"
-                >
-                  <div className="w-2 h-2 bg-fabrick-yellow rounded-full animate-ping" />
-                  <span className="text-[10px] font-black uppercase tracking-widest text-fabrick-yellow">En Construcción</span>
-                </motion.div>
+                <div className="flex flex-col items-end gap-3">
+                  <motion.div 
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="flex items-center gap-2 px-4 py-2 bg-fabrick-yellow/10 rounded-full border border-fabrick-yellow/20 active-scale cursor-default"
+                  >
+                    <div className="w-2 h-2 bg-fabrick-yellow rounded-full animate-ping" />
+                    <span className="text-[10px] font-black uppercase tracking-widest text-fabrick-yellow">En Construcción</span>
+                  </motion.div>
+                  
+                  <motion.button
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.5 }}
+                    onClick={handleGenerateReport}
+                    className="flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl transition-all active-scale group"
+                  >
+                    <FileDown size={14} className="text-fabrick-yellow group-hover:scale-110 transition-transform" />
+                    <span className="text-[10px] font-black uppercase tracking-widest text-white">Generar Reporte PDF</span>
+                  </motion.button>
+                </div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-10">

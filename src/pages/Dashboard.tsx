@@ -15,7 +15,6 @@ import {
   ChevronDown,
   ChevronUp
 } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
 import { db, auth } from '../firebase';
 import { collection, query, where, onSnapshot, orderBy, limit } from 'firebase/firestore';
 import { Project, Phase, Deadline, Post } from '../types';
@@ -162,61 +161,44 @@ export default function Dashboard() {
         {/* Hero Section */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
           <div className="lg:col-span-2">
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
+            <div 
               className="android-card p-8 relative overflow-hidden border-t-4 border-fabrick-yellow shadow-ios"
             >
               <div className="absolute top-0 right-0 w-64 h-64 bg-fabrick-yellow/5 blur-[100px] rounded-full -mr-32 -mt-32 animate-pulse" />
               
               <div className="flex justify-between items-start mb-10 relative z-10">
                 <div>
-                  <motion.span 
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.3 }}
+                  <span 
                     className="text-[10px] font-headline uppercase tracking-[0.4em] text-fabrick-yellow font-black mb-3 block"
                   >
                     Estado del Proyecto
-                  </motion.span>
-                  <motion.h2 
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.4 }}
+                  </span>
+                  <h2 
                     className="text-4xl md:text-5xl font-headline font-black tracking-tighter uppercase text-white leading-none"
                   >
                     RESIDENCIA <span className="text-fabrick-yellow">VALLE AZUL</span>
-                  </motion.h2>
+                  </h2>
                 </div>
                 <div className="flex flex-col items-end gap-3">
-                  <motion.div 
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ opacity: 1, scale: 1 }}
+                  <div 
                     className="flex items-center gap-2 px-4 py-2 bg-fabrick-yellow/10 rounded-full border border-fabrick-yellow/20 active-scale cursor-default"
                   >
                     <div className="w-2 h-2 bg-fabrick-yellow rounded-full animate-ping" />
                     <span className="text-[10px] font-black uppercase tracking-widest text-fabrick-yellow">En Construcción</span>
-                  </motion.div>
+                  </div>
                   
-                  <motion.button
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.5 }}
+                  <button
                     onClick={handleGenerateReport}
                     className="flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl transition-all active-scale group"
                   >
                     <FileDown size={14} className="text-fabrick-yellow group-hover:scale-110 transition-transform" />
                     <span className="text-[10px] font-black uppercase tracking-widest text-white">Generar Reporte PDF</span>
-                  </motion.button>
+                  </button>
                 </div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-                <motion.div 
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.5 }}
+                <div 
                   className="space-y-3"
                 >
                   <p className="text-[10px] font-headline uppercase tracking-widest text-fabrick-gray font-bold">Progreso General</p>
@@ -225,19 +207,14 @@ export default function Dashboard() {
                     <TrendingUp size={24} className="text-fabrick-yellow mb-2" />
                   </div>
                   <div className="h-2 bg-white/5 rounded-full overflow-hidden">
-                    <motion.div 
-                      initial={{ width: 0 }}
-                      animate={{ width: `${project?.progress}%` }}
-                      transition={{ duration: 1.5, ease: "easeOut", delay: 0.6 }}
+                    <div 
+                      style={{ width: `${project?.progress}%` }}
                       className="h-full bg-gradient-to-r from-fabrick-yellow to-fabrick-lava shadow-[0_0_10px_rgba(250,204,21,0.3)]" 
                     />
                   </div>
-                </motion.div>
+                </div>
 
-                <motion.div 
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.6 }}
+                <div 
                   className="space-y-3"
                 >
                   <p className="text-[10px] font-headline uppercase tracking-widest text-fabrick-gray font-bold">Fase Actual</p>
@@ -246,28 +223,22 @@ export default function Dashboard() {
                     <Clock size={14} />
                     <span>Actualizado {project?.lastUpdated}</span>
                   </div>
-                </motion.div>
+                </div>
 
-                <motion.div 
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.7 }}
+                <div 
                   className="space-y-3"
                 >
                   <p className="text-[10px] font-headline uppercase tracking-widest text-fabrick-gray font-bold">Días para Entrega</p>
                   <p className="text-5xl font-headline font-black text-white tracking-tighter">{project?.deliveryCountdown}</p>
                   <p className="text-[10px] font-headline uppercase tracking-[0.2em] text-fabrick-lava font-black">Cuenta Regresiva</p>
-                </motion.div>
+                </div>
               </div>
-            </motion.div>
+            </div>
           </div>
 
           {/* Calculator Section */}
           <div className="space-y-6">
-            <motion.div 
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
+            <div 
               className="android-card p-8 border-l-4 border-fabrick-yellow bg-gradient-to-br from-fabrick-card to-fabrick-yellow/5 relative overflow-hidden shadow-ios"
             >
               <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-fabrick-yellow/10 blur-3xl rounded-full" />
@@ -298,8 +269,7 @@ export default function Dashboard() {
                   </div>
                 </div>
 
-                <motion.div 
-                  whileHover={{ scale: 1.02 }}
+                <div 
                   className="p-6 bg-fabrick-black/60 rounded-3xl border border-white/5 shadow-inner group transition-all hover:border-fabrick-yellow/20 active-scale"
                 >
                   <p className="text-[10px] text-fabrick-gray uppercase mb-2 font-black tracking-widest flex items-center gap-2">
@@ -312,7 +282,7 @@ export default function Dashboard() {
                     </p>
                     <span className="text-xs text-fabrick-yellow font-black uppercase">CLP</span>
                   </div>
-                </motion.div>
+                </div>
 
                 <div className="flex items-center gap-4 text-[10px] text-fabrick-gray bg-white/5 p-4 rounded-2xl border border-white/5">
                   <div className="w-10 h-10 rounded-full bg-fabrick-yellow/10 flex items-center justify-center shrink-0">
@@ -323,7 +293,7 @@ export default function Dashboard() {
                   </p>
                 </div>
               </div>
-            </motion.div>
+            </div>
           </div>
         </div>
 
@@ -341,13 +311,9 @@ export default function Dashboard() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-4">
                 {phases.map((phase, idx) => (
-                  <motion.div 
+                  <div 
                     key={phase.id} 
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.1 * idx }}
                     onClick={() => setSelectedPhaseId(phase.id)}
-                    whileHover={{ x: 5 }}
                     className={`android-card p-5 transition-all cursor-pointer group relative active-scale ${
                       selectedPhaseId === phase.id ? 'border-fabrick-yellow ring-2 ring-fabrick-yellow/20' : 'hover:border-white/20'
                     }`}
@@ -375,75 +341,61 @@ export default function Dashboard() {
                       </div>
                     </div>
                     <div className="h-2 bg-white/5 rounded-full overflow-hidden">
-                      <motion.div 
-                        initial={{ width: 0 }}
-                        animate={{ width: `${phase.progress}%` }}
-                        transition={{ duration: 1, delay: 0.2 + idx * 0.1 }}
+                      <div 
+                        style={{ width: `${phase.progress}%` }}
                         className={`h-full transition-all duration-1000 shadow-[0_0_8px_rgba(250,204,21,0.2)] ${
                           phase.status === 'completed' ? 'bg-fabrick-yellow' : 'bg-fabrick-yellow/50'
                         }`} 
                       />
                     </div>
                     {selectedPhaseId === phase.id && (
-                      <motion.div 
-                        layoutId="active-indicator"
+                      <div 
                         className="absolute -right-2 top-1/2 -translate-y-1/2 w-1.5 h-10 bg-fabrick-yellow rounded-full hidden md:block" 
                       />
                     )}
-                  </motion.div>
+                  </div>
                 ))}
               </div>
 
               {/* Checklist for selected phase */}
-              <AnimatePresence mode="wait">
-                  <motion.div 
-                    key={selectedPhaseId || 'empty'}
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.95 }}
-                    className="android-card p-8 border-fabrick-yellow/20 min-h-[450px] shadow-ios"
-                  >
-                    <div className="flex items-center gap-4 mb-8">
-                      <div className="p-3 bg-fabrick-yellow/10 rounded-2xl">
-                        <ListTodo size={24} className="text-fabrick-yellow" />
-                      </div>
-                      <h4 className="font-headline font-black text-xl uppercase tracking-tight">
-                        Tareas: {phases.find(p => p.id === selectedPhaseId)?.name || 'Selecciona Fase'}
-                      </h4>
-                    </div>
+              <div 
+                className="android-card p-8 border-fabrick-yellow/20 min-h-[450px] shadow-ios"
+              >
+                <div className="flex items-center gap-4 mb-8">
+                  <div className="p-3 bg-fabrick-yellow/10 rounded-2xl">
+                    <ListTodo size={24} className="text-fabrick-yellow" />
+                  </div>
+                  <h4 className="font-headline font-black text-xl uppercase tracking-tight">
+                    Tareas: {phases.find(p => p.id === selectedPhaseId)?.name || 'Selecciona Fase'}
+                  </h4>
+                </div>
 
-                    <div className="space-y-4">
-                      {phaseTasks[selectedPhaseId || '']?.map((task, idx) => (
-                        <motion.div 
-                          key={task.id}
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ delay: idx * 0.05 }}
-                          onClick={() => toggleTask(selectedPhaseId!, task.id)}
-                          whileHover={{ scale: 1.01 }}
-                          whileTap={{ scale: 0.98 }}
-                          className="flex items-center gap-5 p-5 bg-white/5 rounded-2xl border border-white/5 hover:bg-white/10 transition-all cursor-pointer group active-scale"
-                        >
-                          <div className={`w-7 h-7 rounded-xl border-2 flex items-center justify-center transition-all shadow-sm ${
-                            task.completed ? 'bg-fabrick-yellow border-fabrick-yellow text-fabrick-black' : 'border-white/20 group-hover:border-fabrick-yellow/50'
-                          }`}>
-                            {task.completed && <CheckCircle2 size={16} strokeWidth={3} />}
-                          </div>
-                          <span className={`text-base font-bold transition-all tracking-tight ${
-                            task.completed ? 'text-fabrick-gray line-through' : 'text-white'
-                          }`}>
-                            {task.label}
-                          </span>
-                        </motion.div>
-                      )) || (
-                        <div className="flex flex-col items-center justify-center py-16 text-center opacity-30">
-                          <ListTodo size={48} className="mb-6" />
-                          <p className="text-xs uppercase font-black tracking-[0.2em]">Selecciona una fase para ver tareas</p>
-                        </div>
-                      )}
+                <div className="space-y-4">
+                  {phaseTasks[selectedPhaseId || '']?.map((task, idx) => (
+                    <div 
+                      key={task.id}
+                      onClick={() => toggleTask(selectedPhaseId!, task.id)}
+                      className="flex items-center gap-5 p-5 bg-white/5 rounded-2xl border border-white/5 hover:bg-white/10 transition-all cursor-pointer group active-scale"
+                    >
+                      <div className={`w-7 h-7 rounded-xl border-2 flex items-center justify-center transition-all shadow-sm ${
+                        task.completed ? 'bg-fabrick-yellow border-fabrick-yellow text-fabrick-black' : 'border-white/20 group-hover:border-fabrick-yellow/50'
+                      }`}>
+                        {task.completed && <CheckCircle2 size={16} strokeWidth={3} />}
+                      </div>
+                      <span className={`text-base font-bold transition-all tracking-tight ${
+                        task.completed ? 'text-fabrick-gray line-through' : 'text-white'
+                      }`}>
+                        {task.label}
+                      </span>
                     </div>
-                  </motion.div>
-              </AnimatePresence>
+                  )) || (
+                    <div className="flex flex-col items-center justify-center py-16 text-center opacity-30">
+                      <ListTodo size={48} className="mb-6" />
+                      <p className="text-xs uppercase font-black tracking-[0.2em]">Selecciona una fase para ver tareas</p>
+                    </div>
+                  )}
+                </div>
+              </div>
             </div>
           </div>
 
@@ -452,11 +404,8 @@ export default function Dashboard() {
             <h3 className="font-headline text-2xl font-black tracking-tighter uppercase text-white">Muro del Proyecto</h3>
             <div className="android-card p-8 space-y-8 max-h-[600px] overflow-y-auto hide-scrollbar shadow-ios">
               {recentPosts.map((post, idx) => (
-                <motion.div 
+                <div 
                   key={post.id} 
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.5 + idx * 0.1 }}
                   className="relative pl-6 border-l-2 border-white/5 hover:border-fabrick-yellow/30 transition-colors"
                 >
                   <div className="flex items-center gap-4 mb-3">
@@ -475,15 +424,13 @@ export default function Dashboard() {
                       </span>
                     )}
                   </div>
-                </motion.div>
+                </div>
               ))}
-              <motion.button 
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
+              <button 
                 className="w-full py-4 bg-white/5 text-[10px] font-black uppercase tracking-[0.2em] text-white hover:bg-white/10 transition-colors rounded-2xl active-scale"
               >
                 Ver Toda la Actividad
-              </motion.button>
+              </button>
             </div>
           </div>
         </div>

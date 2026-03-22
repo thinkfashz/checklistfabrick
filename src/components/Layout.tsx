@@ -15,7 +15,6 @@ import {
   LogOut,
   User
 } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
 import { auth, signInWithGoogle, logout } from '../firebase';
 import { onAuthStateChanged, User as FirebaseUser } from 'firebase/auth';
 
@@ -97,8 +96,7 @@ export default function Layout({ children, currentPage, onPageChange, onLogout }
               >
                 {item.label}
                 {currentPage === item.id && (
-                  <motion.div 
-                    layoutId="nav-underline"
+                  <div 
                     className="absolute bottom-0 left-0 right-0 h-0.5 bg-fabrick-yellow rounded-full"
                   />
                 )}
@@ -135,17 +133,9 @@ export default function Layout({ children, currentPage, onPageChange, onLogout }
 
       {/* Main Content */}
       <main className="flex-grow pb-24 md:pb-12">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={currentPage}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.3 }}
-          >
-            {children}
-          </motion.div>
-        </AnimatePresence>
+        <div key={currentPage}>
+          {children}
+        </div>
       </main>
 
       {/* Mobile Bottom Nav */}
@@ -177,52 +167,42 @@ export default function Layout({ children, currentPage, onPageChange, onLogout }
       </div>
 
       {/* Mobile Side Menu */}
-      <AnimatePresence>
-        {isMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.95 }}
-            className="fixed inset-0 z-[60] glass-panel p-8 flex flex-col md:hidden"
-          >
-            <div className="flex justify-between items-center mb-16">
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 bg-fabrick-yellow rounded-lg flex items-center justify-center">
-                   <span className="font-headline font-black text-fabrick-black text-sm">F</span>
-                </div>
-                <h2 className="font-headline font-black text-lg tracking-tight">MENÚ</h2>
+      {isMenuOpen && (
+        <div className="fixed inset-0 z-[60] glass-panel p-8 flex flex-col md:hidden">
+          <div className="flex justify-between items-center mb-16">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 bg-fabrick-yellow rounded-lg flex items-center justify-center">
+                 <span className="font-headline font-black text-fabrick-black text-sm">F</span>
               </div>
-              <button onClick={() => setIsMenuOpen(false)} className="p-2 bg-white/5 rounded-full active-scale"><X size={24} /></button>
+              <h2 className="font-headline font-black text-lg tracking-tight">MENÚ</h2>
             </div>
-            <div className="flex flex-col gap-4">
-              {navItems.map((item, index) => (
-                <motion.button
-                  key={item.id}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.05 }}
-                  onClick={() => {
-                    onPageChange(item.id);
-                    setIsMenuOpen(false);
-                  }}
-                  className={`flex items-center gap-5 p-5 rounded-3xl transition-all active-scale ${currentPage === item.id ? 'bg-fabrick-yellow text-fabrick-black' : 'bg-white/5 text-white'}`}
-                >
-                  <item.icon size={24} />
-                  <span className="text-xl font-headline font-black uppercase tracking-tight">{item.label}</span>
-                </motion.button>
-              ))}
-            </div>
-            
-            <div className="mt-auto pt-8 border-t border-white/10">
-               {user && (
-                 <button onClick={handleLogout} className="w-full flex items-center justify-center gap-3 p-5 bg-red-500/10 text-red-500 rounded-3xl font-bold active-scale">
-                   <LogOut size={20} /> Cerrar Sesión
-                 </button>
-               )}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+            <button onClick={() => setIsMenuOpen(false)} className="p-2 bg-white/5 rounded-full active-scale"><X size={24} /></button>
+          </div>
+          <div className="flex flex-col gap-4">
+            {navItems.map((item, index) => (
+              <button
+                key={item.id}
+                onClick={() => {
+                  onPageChange(item.id);
+                  setIsMenuOpen(false);
+                }}
+                className={`flex items-center gap-5 p-5 rounded-3xl transition-all active-scale ${currentPage === item.id ? 'bg-fabrick-yellow text-fabrick-black' : 'bg-white/5 text-white'}`}
+              >
+                <item.icon size={24} />
+                <span className="text-xl font-headline font-black uppercase tracking-tight">{item.label}</span>
+              </button>
+            ))}
+          </div>
+          
+          <div className="mt-auto pt-8 border-t border-white/10">
+             {user && (
+               <button onClick={handleLogout} className="w-full flex items-center justify-center gap-3 p-5 bg-red-500/10 text-red-500 rounded-3xl font-bold active-scale">
+                 <LogOut size={20} /> Cerrar Sesión
+               </button>
+             )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

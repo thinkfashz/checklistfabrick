@@ -1,5 +1,4 @@
 import React from 'react';
-import { motion } from 'framer-motion';
 import { Users, CheckCircle2, AlertCircle, Clock, HardHat, Construction, ShieldCheck } from 'lucide-react';
 import TechBackground from '../components/TechBackground';
 
@@ -65,31 +64,23 @@ export default function Team() {
 
       <div className="relative z-10">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 gap-6">
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-          >
+          <div>
             <h2 className="text-4xl font-headline font-bold uppercase tracking-tighter text-white">Equipo y Avance</h2>
             <p className="text-fabrick-gray font-body mt-2">Detalle técnico de la obra y personal a cargo.</p>
-          </motion.div>
-          <motion.div 
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="flex -space-x-4"
-          >
+          </div>
+          <div className="flex -space-x-4">
             {teamMembers.map(member => (
-              <motion.div 
+              <div 
                 key={member.id} 
-                whileHover={{ y: -5, scale: 1.1, zIndex: 10 }}
-                className="w-12 h-12 rounded-full border-2 border-fabrick-black overflow-hidden relative group cursor-pointer"
+                className="w-12 h-12 rounded-full border-2 border-fabrick-black overflow-hidden relative group cursor-pointer hover:z-10 transition-all"
               >
                 <img src={member.image} alt={member.name} className="w-full h-full object-cover" />
                 <div className="absolute inset-0 bg-fabrick-lava/80 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                   <Users size={16} className="text-white" />
                 </div>
-              </motion.div>
+              </div>
             ))}
-          </motion.div>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -98,13 +89,8 @@ export default function Team() {
             <h3 className="font-headline text-xl font-bold uppercase tracking-widest text-fabrick-yellow mb-6">Bitácora de Obra</h3>
             <div className="space-y-4">
               {constructionProgress.map((item, i) => (
-                <motion.div 
+                <div 
                   key={item.id}
-                  initial={{ opacity: 0, x: -20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.1 }}
-                  whileHover={{ x: 5 }}
                   className="android-card p-6 border-l-4 border-white/10 hover:border-fabrick-lava transition-all cursor-default active-scale"
                 >
                   <div className="flex justify-between items-start mb-4">
@@ -126,7 +112,7 @@ export default function Team() {
                     </span>
                   </div>
                   <p className="text-sm text-fabrick-gray leading-relaxed">{item.details}</p>
-                </motion.div>
+                </div>
               ))}
             </div>
           </div>
@@ -136,13 +122,8 @@ export default function Team() {
             <h3 className="font-headline text-xl font-bold uppercase tracking-widest text-fabrick-lava mb-6">Incidencias Resueltas</h3>
             <div className="space-y-4">
               {resolvedIssues.map((issue, i) => (
-                <motion.div 
+                <div 
                   key={issue.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.3 + i * 0.1 }}
-                  whileHover={{ scale: 1.02 }}
                   className="p-5 bg-white/5 border border-white/10 rounded-2xl relative overflow-hidden cursor-default active-scale"
                 >
                   <div className="absolute top-0 right-0 p-2">
@@ -158,18 +139,15 @@ export default function Team() {
                     <span>{issue.date}</span>
                     <span className="text-fabrick-yellow">Cerrado</span>
                   </div>
-                </motion.div>
+                </div>
               ))}
               
-              <motion.div 
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                viewport={{ once: true }}
+              <div 
                 className="p-6 border border-dashed border-white/10 rounded-2xl flex flex-col items-center justify-center text-center"
               >
                 <Clock size={32} className="text-fabrick-gray mb-3 opacity-30" />
                 <p className="text-xs text-fabrick-gray uppercase tracking-widest font-bold">Sin incidencias críticas activas</p>
-              </motion.div>
+              </div>
             </div>
           </div>
         </div>

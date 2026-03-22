@@ -14,6 +14,7 @@ import ErrorAdapter from './components/ErrorAdapter';
 import AppAnalyzer from './components/AppAnalyzer';
 
 export default function App() {
+  console.log('App function executing...');
   const [user, setUser] = useState<FirebaseUser | LocalUser | null>(null);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState('home');
@@ -80,38 +81,30 @@ export default function App() {
   };
 
   if (loading) {
+    console.log('App is in loading state');
     return (
-      <div className="min-h-screen bg-fabrick-black flex flex-col items-center justify-center gap-8 p-6">
-        <div className="relative">
-          <div className="w-24 h-24 bg-fabrick-yellow rounded-3xl flex items-center justify-center shadow-yellow-glow transform rotate-12">
-            <span className="text-5xl font-headline font-black text-fabrick-black">F</span>
-          </div>
-          <div className="absolute -inset-4 border-2 border-fabrick-yellow/20 rounded-[2.5rem] animate-pulse" />
+      <div style={{ backgroundColor: '#050505', minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: 'white', fontFamily: 'sans-serif' }}>
+        <div style={{ width: '80px', height: '80px', backgroundColor: '#FACC15', borderRadius: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px' }}>
+          <span style={{ fontSize: '40px', fontWeight: 'bold', color: 'black' }}>F</span>
         </div>
-        
-        <div className="flex flex-col items-center gap-4 text-center max-w-xs">
-          <h2 className="text-white font-headline font-black uppercase tracking-[0.5em] text-xl">
-            CASAS <span className="text-fabrick-yellow">FABRIS</span>
-          </h2>
-          <div className="h-[1px] w-12 bg-gradient-to-r from-transparent via-fabrick-yellow to-transparent" />
-          <p className="text-fabrick-gray text-[10px] uppercase tracking-[0.25em] font-bold leading-relaxed">
-            Sincronizando datos de obra y gestión de proyectos
-          </p>
-        </div>
-
-        <div className="mt-12 flex flex-col items-center gap-4">
-          <p className="text-fabrick-gray text-[9px] uppercase tracking-widest">Si la carga demora demasiado:</p>
-          <button 
-            onClick={() => setLoading(false)}
-            className="px-6 py-3 bg-white/5 border border-white/10 rounded-2xl text-fabrick-gray text-[10px] uppercase tracking-widest hover:bg-white/10 hover:text-white transition-all active:scale-95"
-          >
-            Forzar inicio de aplicación
-          </button>
-        </div>
+        <h2 style={{ letterSpacing: '0.5em', fontWeight: '900' }}>CASAS FABRIS</h2>
+        <p style={{ color: '#71717A', fontSize: '10px', marginTop: '10px', textTransform: 'uppercase', letterSpacing: '0.2em' }}>
+          Cargando sistema de gestión...
+        </p>
+        <button 
+          onClick={() => {
+            console.log('Manual override: setting loading to false');
+            setLoading(false);
+          }}
+          style={{ marginTop: '40px', padding: '10px 20px', background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', color: 'white', borderRadius: '10px', cursor: 'pointer' }}
+        >
+          FORZAR INICIO
+        </button>
       </div>
     );
   }
 
+  console.log('App is rendering main content, user:', user?.email || 'none');
   return (
     <ErrorAdapter>
       {!user ? (

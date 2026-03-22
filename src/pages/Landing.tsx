@@ -1,5 +1,4 @@
 import React, { useState, Suspense } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronRight, Play, ArrowUpRight, Box, Shield, Zap, MousePointer2, CheckCircle2, X, Lock, Mail } from 'lucide-react';
 import { signInWithGoogle } from '../firebase';
 import { localAuth, User } from '../services/authService';
@@ -41,53 +40,34 @@ export default function Landing({ onLoginSuccess }: LandingProps) {
 
       <div className="container mx-auto px-6 pt-32 pb-32 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
-          <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
-          >
-            <motion.div 
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
+          <div>
+            <div 
               className="inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-fabrick-yellow/10 border border-fabrick-yellow/20 mb-10 shadow-ios"
             >
               <div className="w-2 h-2 rounded-full bg-fabrick-yellow animate-ping" />
               <span className="font-headline text-[10px] uppercase tracking-[0.3em] text-fabrick-yellow font-black">
                 Tu Obra, Bajo Control Total
               </span>
-            </motion.div>
+            </div>
             
-            <motion.h1 
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3, duration: 1, ease: [0.22, 1, 0.36, 1] }}
+            <h1 
               className="font-headline text-5xl md:text-8xl font-black leading-[0.85] tracking-tighter uppercase mb-10 text-white"
             >
               CONSTRUYE <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-fabrick-yellow to-fabrick-lava italic">SIN MIEDO</span> <br />
               AL ABANDONO
-            </motion.h1>
+            </h1>
             
-            <motion.p 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4, duration: 1, ease: [0.22, 1, 0.36, 1] }}
+            <p 
               className="font-body text-fabrick-gray text-lg md:text-xl max-w-xl mb-14 leading-relaxed font-medium"
             >
               En <span className="text-white font-bold">CASAS FABRICK</span> eliminamos la incertidumbre. Nuestra plataforma combate el abandono de obras y los sobrecostos mediante transparencia absoluta, reportes semanales de avance y un proceso certificado en Metalcom.
-            </motion.p>
+            </p>
 
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5, duration: 1, ease: [0.22, 1, 0.36, 1] }}
+            <div 
               className="flex flex-col sm:flex-row gap-6"
             >
-              <motion.button 
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+              <button 
                 onClick={() => setShowLoginModal(true)}
                 className="group relative px-12 py-6 bg-fabrick-lava text-white font-headline text-xs uppercase tracking-[0.2em] font-black rounded-3xl overflow-hidden transition-all shadow-ios active-scale"
               >
@@ -95,22 +75,17 @@ export default function Landing({ onLoginSuccess }: LandingProps) {
                   ACCESO CLIENTES <ChevronRight size={20} className="group-hover:translate-x-2 transition-transform" />
                 </span>
                 <div className="absolute inset-0 bg-fabrick-yellow translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-[0.22, 1, 0.36, 1]" />
-              </motion.button>
+              </button>
               
-              <motion.button 
-                whileHover={{ scale: 1.05, backgroundColor: "rgba(255,255,255,0.08)" }}
-                whileTap={{ scale: 0.95 }}
+              <button 
                 onClick={signInWithGoogle}
                 className="px-12 py-6 border-2 border-white/10 text-white font-headline text-xs uppercase tracking-[0.2em] font-black rounded-3xl transition-all flex items-center justify-center gap-4 active-scale backdrop-blur-sm"
               >
                 GOOGLE LOGIN <ArrowUpRight size={20} />
-              </motion.button>
-            </motion.div>
+              </button>
+            </div>
 
-            <motion.div 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 1, duration: 1.5 }}
+            <div 
               className="mt-20 grid grid-cols-3 gap-10 border-t border-white/5 pt-10"
             >
               {[
@@ -118,38 +93,30 @@ export default function Landing({ onLoginSuccess }: LandingProps) {
                 { icon: Zap, label: 'Transparencia' },
                 { icon: Box, label: 'Garantía' },
               ].map((item, i) => (
-                <motion.div 
+                <div 
                   key={i} 
-                  whileHover={{ y: -8 }}
                   className="flex flex-col gap-3 group cursor-default"
                 >
                   <div className="w-10 h-10 rounded-2xl bg-white/5 flex items-center justify-center group-hover:bg-fabrick-yellow/10 transition-colors">
                     <item.icon size={20} className="text-fabrick-yellow group-hover:scale-110 transition-transform" />
                   </div>
                   <span className="text-[10px] font-headline uppercase tracking-[0.25em] font-black text-white/60 group-hover:text-white transition-colors">{item.label}</span>
-                </motion.div>
+                </div>
               ))}
-            </motion.div>
-          </motion.div>
+            </div>
+          </div>
 
           {/* Visual Element Section */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9, rotateY: 15 }}
-            animate={{ opacity: 1, scale: 1, rotateY: 0 }}
-            transition={{ delay: 0.4, duration: 1.5, ease: [0.22, 1, 0.36, 1] }}
+          <div
             className="relative h-[600px] lg:h-[800px] w-full hidden lg:block"
           >
             {/* Stylized Architectural Graphic */}
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="relative w-full h-full max-w-md max-h-md">
-                <motion.div 
-                  animate={{ rotate: 360 }}
-                  transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
+                <div 
                   className="absolute inset-0 border-[1px] border-white/5 rounded-full"
                 />
-                <motion.div 
-                  animate={{ rotate: -360 }}
-                  transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
+                <div 
                   className="absolute inset-10 border-[1px] border-fabrick-yellow/10 rounded-full"
                 />
                 <div className="absolute inset-0 flex items-center justify-center">
@@ -165,20 +132,16 @@ export default function Landing({ onLoginSuccess }: LandingProps) {
             </div>
 
             {/* Floating UI Elements */}
-            <motion.div 
-              animate={{ y: [0, -15, 0] }}
-              transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+            <div 
               className="absolute top-20 right-10 glass-panel p-6 rounded-3xl border border-white/10 z-20 shadow-ios"
             >
               <div className="flex items-center gap-4">
                 <div className="w-4 h-4 rounded-full bg-fabrick-yellow shadow-[0_0_15px_rgba(250,204,21,0.5)] animate-pulse" />
                 <span className="text-xs font-black uppercase tracking-widest text-white">Avance Semanal</span>
               </div>
-            </motion.div>
+            </div>
 
-            <motion.div 
-              animate={{ y: [0, 15, 0] }}
-              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+            <div 
               className="absolute bottom-20 left-10 glass-panel p-6 rounded-3xl border border-white/10 z-20 shadow-ios"
             >
               <div className="flex items-center gap-4">
@@ -187,71 +150,65 @@ export default function Landing({ onLoginSuccess }: LandingProps) {
                 </div>
                 <span className="text-xs font-black uppercase tracking-widest text-white">Cero Abandono</span>
               </div>
-            </motion.div>
-          </motion.div>
+            </div>
+          </div>
         </div>
 
         {/* Problem & Solution Section */}
         <div className="mt-32 grid grid-cols-1 md:grid-cols-2 gap-20 items-center">
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            className="space-y-8"
-          >
-            <h2 className="font-headline text-4xl md:text-6xl font-black uppercase tracking-tighter text-white leading-none">
-              EL PROBLEMA DEL <br />
-              <span className="text-fabrick-lava">MAESTRO AUSENTE</span>
-            </h2>
-            <p className="text-fabrick-gray text-lg leading-relaxed">
-              Sabemos que el mayor miedo al construir es el abandono de la obra, los cobros inesperados y la falta de comunicación. Muchos proyectos quedan a medias, drenando tus ahorros y tu tranquilidad.
-            </p>
-            <div className="space-y-4">
-              {[
-                'Cobros por materiales no utilizados',
-                'Retrasos injustificados sin aviso',
-                'Falta de supervisión profesional',
-                'Incertidumbre en el proceso Metalcom'
-              ].map((item, i) => (
-                <div key={i} className="flex items-center gap-4 text-white/80 font-bold text-sm">
-                  <div className="w-1.5 h-1.5 rounded-full bg-fabrick-lava" />
-                  {item}
-                </div>
-              ))}
-            </div>
-          </motion.div>
+        <div
+          className="space-y-8"
+        >
+          <h2 className="font-headline text-4xl md:text-6xl font-black uppercase tracking-tighter text-white leading-none">
+            EL PROBLEMA DEL <br />
+            <span className="text-fabrick-lava">MAESTRO AUSENTE</span>
+          </h2>
+          <p className="text-fabrick-gray text-lg leading-relaxed">
+            Sabemos que el mayor miedo al construir es el abandono de la obra, los cobros inesperados y la falta de comunicación. Muchos proyectos quedan a medias, drenando tus ahorros y tu tranquilidad.
+          </p>
+          <div className="space-y-4">
+            {[
+              'Cobros por materiales no utilizados',
+              'Retrasos injustificados sin aviso',
+              'Falta de supervisión profesional',
+              'Incertidumbre en el proceso Metalcom'
+            ].map((item, i) => (
+              <div key={i} className="flex items-center gap-4 text-white/80 font-bold text-sm">
+                <div className="w-1.5 h-1.5 rounded-full bg-fabrick-lava" />
+                {item}
+              </div>
+            ))}
+          </div>
+        </div>
 
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            className="android-card p-10 border-fabrick-yellow/20 relative overflow-hidden"
-          >
-            <div className="absolute top-0 right-0 p-6 opacity-10">
-              <Shield size={120} className="text-fabrick-yellow" />
-            </div>
-            <h3 className="font-headline text-3xl font-black uppercase text-fabrick-yellow mb-6">LA SOLUCIÓN FABRICK</h3>
-            <p className="text-white/90 text-lg leading-relaxed mb-8">
-              Nuestra aplicación es el puente entre tu inversión y tu casa terminada. A través de tecnología y transparencia, garantizamos que cada clavo y cada perfil de Metalcom esté en su lugar.
-            </p>
-            <div className="grid grid-cols-1 gap-6">
-              {[
-                { title: 'Transparencia Total', desc: 'Acceso 24/7 a gastos, facturas y estados de cuenta.' },
-                { title: 'Reportes Semanales', desc: 'Resúmenes detallados con fotos y videos del avance real.' },
-                { title: 'Garantía Estructural', desc: 'Certificación de procesos constructivos en Metalcom.' }
-              ].map((item, i) => (
-                <div key={i} className="flex gap-4">
-                  <div className="mt-1">
-                    <CheckCircle2 size={20} className="text-fabrick-yellow" />
-                  </div>
-                  <div>
-                    <h4 className="text-white font-black uppercase text-xs tracking-widest mb-1">{item.title}</h4>
-                    <p className="text-fabrick-gray text-xs leading-relaxed">{item.desc}</p>
-                  </div>
+        <div
+          className="android-card p-10 border-fabrick-yellow/20 relative overflow-hidden"
+        >
+          <div className="absolute top-0 right-0 p-6 opacity-10">
+            <Shield size={120} className="text-fabrick-yellow" />
+          </div>
+          <h3 className="font-headline text-3xl font-black uppercase text-fabrick-yellow mb-6">LA SOLUCIÓN FABRICK</h3>
+          <p className="text-white/90 text-lg leading-relaxed mb-8">
+            Nuestra aplicación es el puente entre tu inversión y tu casa terminada. A través de tecnología y transparencia, garantizamos que cada clavo y cada perfil de Metalcom esté en su lugar.
+          </p>
+          <div className="grid grid-cols-1 gap-6">
+            {[
+              { title: 'Transparencia Total', desc: 'Acceso 24/7 a gastos, facturas y estados de cuenta.' },
+              { title: 'Reportes Semanales', desc: 'Resúmenes detallados con fotos y videos del avance real.' },
+              { title: 'Garantía Estructural', desc: 'Certificación de procesos constructivos en Metalcom.' }
+            ].map((item, i) => (
+              <div key={i} className="flex gap-4">
+                <div className="mt-1">
+                  <CheckCircle2 size={20} className="text-fabrick-yellow" />
                 </div>
-              ))}
-            </div>
-          </motion.div>
+                <div>
+                  <h4 className="text-white font-black uppercase text-xs tracking-widest mb-1">{item.title}</h4>
+                  <p className="text-fabrick-gray text-xs leading-relaxed">{item.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
         </div>
 
         {/* Bottom Stats */}
@@ -262,105 +219,90 @@ export default function Landing({ onLoginSuccess }: LandingProps) {
             { label: 'Reportes Semanales', value: '52/año' },
             { label: 'Garantía Estructural', value: '10 años' },
           ].map((stat, i) => (
-            <motion.div
+            <div
               key={i}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.2 + i * 0.1, duration: 0.8 }}
-              whileHover={{ y: -10 }}
               className="cursor-default group"
             >
               <p className="text-5xl md:text-6xl font-headline font-black mb-2 text-fabrick-yellow tracking-tighter group-hover:scale-110 transition-transform origin-left">{stat.value}</p>
               <p className="text-[10px] font-headline uppercase tracking-[0.3em] text-fabrick-gray font-black group-hover:text-white transition-colors">{stat.label}</p>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>
 
       {/* Login Modal */}
-      <AnimatePresence>
-        {showLoginModal && (
-          <div className="fixed inset-0 z-[100] flex items-center justify-center p-6">
-            <motion.div 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setShowLoginModal(false)}
-              className="absolute inset-0 bg-fabrick-black/90 backdrop-blur-md"
-            />
-            <motion.div 
-              initial={{ scale: 0.9, opacity: 0, y: 20 }}
-              animate={{ scale: 1, opacity: 1, y: 0 }}
-              exit={{ scale: 0.9, opacity: 0, y: 20 }}
-              className="glass-panel p-10 w-full max-w-md relative z-10 border-fabrick-yellow/30 shadow-2xl"
-            >
-              <div className="flex justify-between items-center mb-10">
-                <div>
-                  <h3 className="font-headline text-3xl font-black uppercase text-white tracking-tighter">ACCESO</h3>
-                  <p className="text-[10px] font-headline uppercase tracking-[0.3em] text-fabrick-yellow font-black">Portal de Clientes</p>
+      {showLoginModal && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-6">
+          <div 
+            onClick={() => setShowLoginModal(false)}
+            className="absolute inset-0 bg-fabrick-black/90 backdrop-blur-md"
+          />
+          <div 
+            className="glass-panel p-10 w-full max-w-md relative z-10 border-fabrick-yellow/30 shadow-2xl"
+          >
+            <div className="flex justify-between items-center mb-10">
+              <div>
+                <h3 className="font-headline text-3xl font-black uppercase text-white tracking-tighter">ACCESO</h3>
+                <p className="text-[10px] font-headline uppercase tracking-[0.3em] text-fabrick-yellow font-black">Portal de Clientes</p>
+              </div>
+              <button onClick={() => setShowLoginModal(false)} className="p-2 hover:bg-white/10 rounded-full transition-colors text-fabrick-gray hover:text-white">
+                <X size={24} />
+              </button>
+            </div>
+
+            <form onSubmit={handleLocalLogin} className="space-y-6">
+              <div className="space-y-2">
+                <label className="text-[10px] uppercase font-black tracking-widest text-fabrick-gray ml-1">Email</label>
+                <div className="relative">
+                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-fabrick-gray" size={18} />
+                  <input 
+                    type="email" 
+                    required
+                    className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 pl-12 pr-4 text-sm focus:outline-none focus:border-fabrick-yellow transition-all text-white placeholder:text-white/20"
+                    placeholder="tu@correo.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
                 </div>
-                <button onClick={() => setShowLoginModal(false)} className="p-2 hover:bg-white/10 rounded-full transition-colors text-fabrick-gray hover:text-white">
-                  <X size={24} />
-                </button>
               </div>
 
-              <form onSubmit={handleLocalLogin} className="space-y-6">
-                <div className="space-y-2">
-                  <label className="text-[10px] uppercase font-black tracking-widest text-fabrick-gray ml-1">Email</label>
-                  <div className="relative">
-                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-fabrick-gray" size={18} />
-                    <input 
-                      type="email" 
-                      required
-                      className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 pl-12 pr-4 text-sm focus:outline-none focus:border-fabrick-yellow transition-all text-white placeholder:text-white/20"
-                      placeholder="tu@correo.com"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                    />
-                  </div>
+              <div className="space-y-2">
+                <label className="text-[10px] uppercase font-black tracking-widest text-fabrick-gray ml-1">Contraseña</label>
+                <div className="relative">
+                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-fabrick-gray" size={18} />
+                  <input 
+                    type="password" 
+                    required
+                    className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 pl-12 pr-4 text-sm focus:outline-none focus:border-fabrick-yellow transition-all text-white placeholder:text-white/20"
+                    placeholder="••••••••"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
                 </div>
+              </div>
 
-                <div className="space-y-2">
-                  <label className="text-[10px] uppercase font-black tracking-widest text-fabrick-gray ml-1">Contraseña</label>
-                  <div className="relative">
-                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-fabrick-gray" size={18} />
-                    <input 
-                      type="password" 
-                      required
-                      className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 pl-12 pr-4 text-sm focus:outline-none focus:border-fabrick-yellow transition-all text-white placeholder:text-white/20"
-                      placeholder="••••••••"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                    />
-                  </div>
-                </div>
-
-                {error && (
-                  <motion.p 
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="text-xs text-fabrick-lava font-bold text-center"
-                  >
-                    {error}
-                  </motion.p>
-                )}
-
-                <button 
-                  type="submit"
-                  className="w-full py-5 bg-fabrick-yellow text-fabrick-black font-headline font-black uppercase tracking-[0.2em] text-xs rounded-2xl shadow-yellow-glow hover:brightness-110 transition-all active-scale mt-4"
+              {error && (
+                <p 
+                  className="text-xs text-fabrick-lava font-bold text-center"
                 >
-                  INGRESAR AL SISTEMA
-                </button>
-
-                <p className="text-[9px] text-center text-fabrick-gray uppercase font-black tracking-widest mt-6">
-                  ¿Olvidaste tu acceso? Contacta a soporte
+                  {error}
                 </p>
-              </form>
-            </motion.div>
+              )}
+
+              <button 
+                type="submit"
+                className="w-full py-5 bg-fabrick-yellow text-fabrick-black font-headline font-black uppercase tracking-[0.2em] text-xs rounded-2xl shadow-yellow-glow hover:brightness-110 transition-all active-scale mt-4"
+              >
+                INGRESAR AL SISTEMA
+              </button>
+
+              <p className="text-[9px] text-center text-fabrick-gray uppercase font-black tracking-widest mt-6">
+                ¿Olvidaste tu acceso? Contacta a soporte
+              </p>
+            </form>
           </div>
-        )}
-      </AnimatePresence>
+        </div>
+      )}
     </div>
   );
 }

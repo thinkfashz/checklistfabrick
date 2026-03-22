@@ -19,10 +19,12 @@ export default function App() {
   const [currentPage, setCurrentPage] = useState('home');
 
   useEffect(() => {
+    console.log('App component mounted, starting auth check...');
     // Safety timeout to prevent permanent black screen
     const timeout = setTimeout(() => {
+      console.warn('Auth check timed out after 5s, forcing app start');
       setLoading(false);
-    }, 3000);
+    }, 5000);
 
     try {
       // Check local auth first
